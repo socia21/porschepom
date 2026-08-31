@@ -1,0 +1,2002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Porsche AG · 2026 Executive Command Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800;14..32,900&family=JetBrains+Mono:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <style>
+        /* ─── ROOT VARIABLES ─── */
+        :root {
+            --bg-body: #f4f7fc;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --bg-card-hover: rgba(255, 255, 255, 0.96);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --shadow: 0 12px 48px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.03);
+            --shadow-hover: 0 24px 64px rgba(0, 0, 0, 0.10), 0 8px 24px rgba(0, 0, 0, 0.04);
+            --text-primary: #0b1a2f;
+            --text-secondary: #2c3e5a;
+            --text-muted: #5a6f8c;
+            --porsche-red: #d5001c;
+            --porsche-gold: #b8860b;
+            --porsche-silver: #8a9bb5;
+            --accent-cyan: #0088cc;
+            --accent-purple: #6c3cb0;
+            --accent-green: #1a8a5a;
+            --accent-orange: #d97a00;
+            --accent-rose: #c94a6e;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --font-display: 'Playfair Display', serif;
+            --radius: 18px;
+            --transition: 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-body);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 0% 0%, rgba(0, 136, 204, 0.03) 0%, transparent 60%),
+                radial-gradient(circle at 100% 100%, rgba(212, 0, 28, 0.03) 0%, transparent 60%);
+        }
+
+        ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.04);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--porsche-red);
+            border-radius: 4px;
+        }
+
+        /* ─── GLASS CARD ─── */
+        .glass {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: all var(--transition);
+        }
+        .glass:hover {
+            box-shadow: var(--shadow-hover);
+            background: var(--bg-card-hover);
+        }
+
+        /* ─── TOP BAR ─── */
+        .top-bar {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--porsche-red);
+            padding: 14px 36px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 800;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .top-bar .brand {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+        .top-bar .brand i {
+            color: var(--porsche-red);
+            margin-right: 10px;
+        }
+        .top-bar .brand span {
+            color: var(--porsche-gold);
+        }
+        .top-bar .sub {
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            letter-spacing: 0.04em;
+            font-family: var(--font-mono);
+        }
+        .top-bar .status {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            background: rgba(0, 136, 204, 0.08);
+            padding: 6px 18px;
+            border-radius: 40px;
+            border: 1px solid rgba(0, 136, 204, 0.2);
+            animation: pulse-status 2.8s infinite ease-in-out;
+        }
+        @keyframes pulse-status {
+            0%,
+            100% {
+                border-color: rgba(0, 136, 204, 0.2);
+            }
+            50% {
+                border-color: rgba(0, 136, 204, 0.6);
+                box-shadow: 0 0 20px rgba(0, 136, 204, 0.08);
+            }
+        }
+
+        /* ─── NAV DOCK ─── */
+        .nav-dock {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 10px 24px;
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+            position: sticky;
+            top: 74px;
+            z-index: 750;
+            flex-wrap: nowrap;
+            scrollbar-width: thin;
+        }
+        .nav-dock::-webkit-scrollbar {
+            height: 3px;
+        }
+        .nav-dock::-webkit-scrollbar-thumb {
+            background: var(--porsche-gold);
+            border-radius: 2px;
+        }
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all var(--transition);
+            letter-spacing: 0.02em;
+        }
+        .nav-btn i {
+            margin-right: 6px;
+            font-size: 0.8rem;
+        }
+        .nav-btn:hover {
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--text-primary);
+        }
+        .nav-btn.active {
+            background: var(--porsche-red);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(212, 0, 28, 0.25);
+        }
+        .nav-btn.active i {
+            color: #fff;
+        }
+
+        /* ─── LAYOUT ─── */
+        .app-wrap {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 28px;
+            max-width: 1920px;
+            margin: 28px auto;
+            padding: 0 28px;
+        }
+        @media (max-width: 1200px) {
+            .app-wrap {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ─── SIDEBAR ─── */
+        .sidebar-timeline {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 22px;
+            position: sticky;
+            top: 146px;
+            max-height: calc(100vh - 170px);
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar-timeline .head {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            padding-bottom: 14px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .sidebar-timeline .head span {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            color: var(--porsche-red);
+            font-weight: 700;
+            background: rgba(212, 0, 28, 0.06);
+            padding: 2px 12px;
+            border-radius: 20px;
+        }
+        .timeline-scroll {
+            overflow-y: auto;
+            padding-right: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+        }
+        .timeline-scroll::-webkit-scrollbar {
+            width: 3px;
+        }
+        .timeline-scroll::-webkit-scrollbar-thumb {
+            background: var(--porsche-gold);
+            border-radius: 2px;
+        }
+        .tl-item {
+            background: rgba(0, 0, 0, 0.02);
+            border-left: 3px solid var(--porsche-red);
+            border-radius: 0 8px 8px 0;
+            padding: 10px 14px;
+            transition: all var(--transition);
+            cursor: default;
+        }
+        .tl-item:hover {
+            background: rgba(0, 0, 0, 0.04);
+            transform: translateX(4px);
+        }
+        .tl-item .yr {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--porsche-gold);
+        }
+        .tl-item .ttl {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 2px 0;
+        }
+        .tl-item .desc {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* ─── PAGE CONTENT ─── */
+        .page-content {
+            display: none;
+            animation: fadeUp 0.5s ease forwards;
+        }
+        .page-content.active {
+            display: block;
+        }
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ─── CARD HEADER ─── */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.04);
+            padding-bottom: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .card-header h2 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+        .card-header h2 i {
+            color: var(--porsche-red);
+            margin-right: 10px;
+        }
+        .pill {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 40px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            background: rgba(212, 0, 28, 0.06);
+            color: var(--porsche-red);
+            border: 1px solid rgba(212, 0, 28, 0.15);
+        }
+        .pill.gold {
+            background: rgba(184, 134, 11, 0.08);
+            color: var(--porsche-gold);
+            border-color: rgba(184, 134, 11, 0.2);
+        }
+        .pill.cyan {
+            background: rgba(0, 136, 204, 0.08);
+            color: var(--accent-cyan);
+            border-color: rgba(0, 136, 204, 0.15);
+        }
+        .pill.purple {
+            background: rgba(108, 60, 176, 0.08);
+            color: var(--accent-purple);
+            border-color: rgba(108, 60, 176, 0.15);
+        }
+        .pill.green {
+            background: rgba(26, 138, 90, 0.08);
+            color: var(--accent-green);
+            border-color: rgba(26, 138, 90, 0.15);
+        }
+        .pill.rose {
+            background: rgba(201, 74, 110, 0.08);
+            color: var(--accent-rose);
+            border-color: rgba(201, 74, 110, 0.15);
+        }
+        .pill.orange {
+            background: rgba(217, 122, 0, 0.08);
+            color: var(--accent-orange);
+            border-color: rgba(217, 122, 0, 0.15);
+        }
+
+        /* ─── BODY TEXT ─── */
+        .body-text {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 0.92rem;
+            margin-bottom: 14px;
+        }
+        .body-text strong {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+        .body-text .highlight-red {
+            color: var(--porsche-red);
+            font-weight: 700;
+        }
+        .body-text .highlight-gold {
+            color: var(--porsche-gold);
+            font-weight: 700;
+        }
+        .body-text .highlight-cyan {
+            color: var(--accent-cyan);
+            font-weight: 700;
+        }
+
+        /* ─── KPI GRID ─── */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+        .kpi-card {
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: 12px;
+            padding: 16px 18px;
+            text-align: center;
+            transition: all var(--transition);
+        }
+        .kpi-card:hover {
+            background: rgba(0, 0, 0, 0.04);
+            transform: translateY(-2px);
+        }
+        .kpi-card .lbl {
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+        .kpi-card .num {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-top: 4px;
+            letter-spacing: -0.02em;
+        }
+        .kpi-card .num.red {
+            color: var(--porsche-red);
+        }
+        .kpi-card .num.gold {
+            color: var(--porsche-gold);
+        }
+        .kpi-card .num.cyan {
+            color: var(--accent-cyan);
+        }
+        .kpi-card .num.green {
+            color: var(--accent-green);
+        }
+        .kpi-card .num.purple {
+            color: var(--accent-purple);
+        }
+        .kpi-card .num.rose {
+            color: var(--accent-rose);
+        }
+
+        /* ─── GRID HELPERS ─── */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            margin-bottom: 22px;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 22px;
+        }
+        .grid-4 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+        @media (max-width: 1024px) {
+            .grid-2,
+            .grid-3,
+            .grid-4 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width: 640px) {
+            .grid-2,
+            .grid-3,
+            .grid-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ─── CHART WRAP ─── */
+        .chart-wrap {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            margin-top: 12px;
+        }
+        .chart-wrap.small {
+            height: 200px;
+        }
+        .chart-wrap.tall {
+            height: 340px;
+        }
+
+        /* ─── PROFILE BANNER ─── */
+        .profile-banner {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: 14px;
+            padding: 18px 24px;
+            margin-bottom: 22px;
+            flex-wrap: wrap;
+        }
+        .avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            flex-shrink: 0;
+        }
+        .profile-banner .name {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .profile-banner .subtitle {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--porsche-gold);
+            font-weight: 600;
+        }
+        .profile-banner .subtitle i {
+            margin-right: 6px;
+        }
+
+        /* ─── MBTI METRICS ─── */
+        .mbti-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+            margin: 14px 0 20px 0;
+        }
+        .mbti-box {
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: 10px;
+            padding: 10px 14px;
+        }
+        .mbti-box .label {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            letter-spacing: 0.04em;
+        }
+        .mbti-box .val {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            color: var(--porsche-gold);
+            font-size: 0.8rem;
+        }
+        .mbti-bar {
+            width: 100%;
+            height: 5px;
+            background: rgba(0, 0, 0, 0.06);
+            border-radius: 3px;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+        .mbti-bar .fill {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, var(--porsche-red), var(--porsche-gold));
+            transition: width 1s ease;
+        }
+
+        /* ─── CAR MATCH ─── */
+        .car-match {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 20px;
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(184, 134, 11, 0.15);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 22px;
+        }
+        @media (max-width: 700px) {
+            .car-match {
+                grid-template-columns: 1fr;
+            }
+        }
+        .car-img {
+            border-radius: 10px;
+            overflow: hidden;
+            height: 200px;
+            background: #eef2f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+        .car-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .car-img .badge {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: var(--porsche-gold);
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 30px;
+            border: 1px solid rgba(184, 134, 11, 0.2);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        }
+        .car-match .info h3 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        /* ─── PLAYBOOK STEP ─── */
+        .step {
+            background: rgba(0, 0, 0, 0.02);
+            border-left: 3px solid var(--accent-cyan);
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 12px;
+            transition: all var(--transition);
+        }
+        .step:hover {
+            background: rgba(0, 0, 0, 0.04);
+        }
+        .step .title {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin-bottom: 3px;
+            letter-spacing: 0.02em;
+        }
+        .step .desc {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* ─── BULLET LIST ─── */
+        .blist {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        .blist li strong {
+            color: var(--text-primary);
+        }
+        .blist li::before {
+            content: "▹ ";
+            color: var(--porsche-red);
+            font-weight: 700;
+        }
+
+        /* ─── TABLES ─── */
+        .p-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            margin-top: 10px;
+        }
+        .p-table th,
+        .p-table td {
+            padding: 10px 14px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            vertical-align: top;
+        }
+        .p-table th {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            background: rgba(0, 0, 0, 0.02);
+            letter-spacing: 0.06em;
+        }
+        .p-table td {
+            color: var(--text-secondary);
+        }
+        .p-table td strong {
+            color: var(--text-primary);
+        }
+        .p-table tr:hover td {
+            background: rgba(0, 0, 0, 0.01);
+        }
+
+        /* ─── CRISIS BLOCK ─── */
+        .crisis-block {
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            transition: all var(--transition);
+        }
+        .crisis-block:hover {
+            background: rgba(0, 0, 0, 0.04);
+        }
+        .crisis-block .year {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--porsche-gold);
+        }
+        .crisis-block .headline {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 4px 0 6px 0;
+        }
+        .crisis-block .detail {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        .crisis-block .detail strong {
+            color: var(--text-primary);
+        }
+
+        /* ─── COLLAB CARD ─── */
+        .collab-card {
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: 12px;
+            padding: 16px 18px;
+            border-left: 3px solid var(--porsche-gold);
+            transition: all var(--transition);
+        }
+        .collab-card:hover {
+            background: rgba(0, 0, 0, 0.04);
+            transform: translateY(-2px);
+        }
+        .collab-card .role {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: var(--porsche-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .collab-card .pair {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 4px 0;
+            font-size: 0.9rem;
+        }
+        .collab-card .desc {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ─── INSIGHT CARD ─── */
+        .insight-card {
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: 12px;
+            padding: 16px 18px;
+            border-top: 3px solid var(--porsche-red);
+            transition: all var(--transition);
+        }
+        .insight-card:hover {
+            background: rgba(0, 0, 0, 0.04);
+        }
+        .insight-card .label {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: var(--porsche-red);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .insight-card .content {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-top: 4px;
+        }
+        .insight-card .content strong {
+            color: var(--text-primary);
+        }
+
+        /* ─── MISC ─── */
+        .mt-8 {
+            margin-top: 8px;
+        }
+        .mt-16 {
+            margin-top: 16px;
+        }
+        .mt-24 {
+            margin-top: 24px;
+        }
+        .mb-16 {
+            margin-bottom: 16px;
+        }
+        .mb-24 {
+            margin-bottom: 24px;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .gap-8 {
+            gap: 8px;
+        }
+        .gap-16 {
+            gap: 16px;
+        }
+
+        .badge-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .mini-badge {
+            font-family: var(--font-mono);
+            font-size: 0.55rem;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--text-muted);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+        .mini-badge.red {
+            background: rgba(212, 0, 28, 0.06);
+            color: var(--porsche-red);
+            border-color: rgba(212, 0, 28, 0.1);
+        }
+        .mini-badge.gold {
+            background: rgba(184, 134, 11, 0.06);
+            color: var(--porsche-gold);
+            border-color: rgba(184, 134, 11, 0.1);
+        }
+        .mini-badge.cyan {
+            background: rgba(0, 136, 204, 0.06);
+            color: var(--accent-cyan);
+            border-color: rgba(0, 136, 204, 0.1);
+        }
+        .mini-badge.green {
+            background: rgba(26, 138, 90, 0.06);
+            color: var(--accent-green);
+            border-color: rgba(26, 138, 90, 0.1);
+        }
+        .mini-badge.purple {
+            background: rgba(108, 60, 176, 0.06);
+            color: var(--accent-purple);
+            border-color: rgba(108, 60, 176, 0.1);
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(0, 0, 0, 0.05);
+            margin: 18px 0;
+        }
+
+        .icon-lg {
+            font-size: 1.8rem;
+            color: var(--porsche-red);
+            opacity: 0.6;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 768px) {
+            .top-bar {
+                padding: 10px 16px;
+            }
+            .top-bar .brand {
+                font-size: 1.1rem;
+            }
+            .top-bar .sub {
+                font-size: 0.6rem;
+            }
+            .nav-dock {
+                padding: 6px 12px;
+                top: 64px;
+            }
+            .app-wrap {
+                padding: 0 12px;
+                margin: 16px auto;
+                gap: 16px;
+            }
+            .sidebar-timeline {
+                position: relative;
+                top: 0;
+                max-height: 400px;
+            }
+            .glass {
+                padding: 16px;
+            }
+            .card-header h2 {
+                font-size: 1.05rem;
+            }
+            .profile-banner {
+                padding: 12px 16px;
+            }
+            .avatar {
+                width: 56px;
+                height: 56px;
+                font-size: 1.1rem;
+            }
+            .profile-banner .name {
+                font-size: 1.2rem;
+            }
+            .kpi-card .num {
+                font-size: 1.4rem;
+            }
+            .car-match {
+                padding: 12px;
+            }
+            .car-img {
+                height: 150px;
+            }
+        }
+
+        /* ─── ANIMATED COUNTER ─── */
+        .counter-wrap {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .counter-item {
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: 12px;
+            padding: 12px 20px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            flex: 1;
+            min-width: 100px;
+            text-align: center;
+        }
+        .counter-item .number {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--porsche-red);
+        }
+        .counter-item .label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-family: var(--font-mono);
+        }
+
+        /* ─── TOOLTIP GLOW ─── */
+        .glow-tip {
+            position: relative;
+        }
+        .glow-tip::after {
+            content: "ⓘ";
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-left: 6px;
+            cursor: help;
+            opacity: 0.6;
+        }
+
+        /* ─── BACKEND-STYLE METRIC BARS ─── */
+        .metric-bar-wrap {
+            margin: 6px 0;
+        }
+        .metric-bar-wrap .mlabel {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .metric-bar-wrap .mlabel .mval {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .metric-bar-wrap .mtrack {
+            width: 100%;
+            height: 6px;
+            background: rgba(0, 0, 0, 0.06);
+            border-radius: 4px;
+            margin-top: 3px;
+            overflow: hidden;
+        }
+        .metric-bar-wrap .mtrack .mfill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--porsche-red), var(--porsche-gold));
+            transition: width 1.2s ease;
+        }
+        .metric-bar-wrap .mtrack .mfill.cyan {
+            background: linear-gradient(90deg, var(--accent-cyan), #66c2ff);
+        }
+        .metric-bar-wrap .mtrack .mfill.green {
+            background: linear-gradient(90deg, var(--accent-green), #4cdb9a);
+        }
+        .metric-bar-wrap .mtrack .mfill.purple {
+            background: linear-gradient(90deg, var(--accent-purple), #b47aff);
+        }
+        .metric-bar-wrap .mtrack .mfill.rose {
+            background: linear-gradient(90deg, var(--accent-rose), #e88aa8);
+        }
+        .metric-bar-wrap .mtrack .mfill.orange {
+            background: linear-gradient(90deg, var(--accent-orange), #ffb347);
+        }
+
+        /* ─── QUOTE BLOCK ─── */
+        .quote-block {
+            background: rgba(0, 0, 0, 0.02);
+            border-left: 4px solid var(--porsche-gold);
+            padding: 14px 20px;
+            border-radius: 0 10px 10px 0;
+            margin: 14px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            line-height: 1.7;
+        }
+        .quote-block .attrib {
+            font-style: normal;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            margin-top: 4px;
+        }
+
+        /* ─── TAG CLOUD ─── */
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 8px 0;
+        }
+        .tag-cloud .tag {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            font-weight: 600;
+            padding: 3px 12px;
+            border-radius: 30px;
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--text-muted);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            transition: all var(--transition);
+        }
+        .tag-cloud .tag:hover {
+            background: var(--porsche-red);
+            color: #fff;
+            border-color: var(--porsche-red);
+        }
+        .tag-cloud .tag.gold {
+            background: rgba(184, 134, 11, 0.06);
+            color: var(--porsche-gold);
+            border-color: rgba(184, 134, 11, 0.1);
+        }
+        .tag-cloud .tag.gold:hover {
+            background: var(--porsche-gold);
+            color: #fff;
+        }
+        .tag-cloud .tag.cyan {
+            background: rgba(0, 136, 204, 0.06);
+            color: var(--accent-cyan);
+            border-color: rgba(0, 136, 204, 0.1);
+        }
+        .tag-cloud .tag.cyan:hover {
+            background: var(--accent-cyan);
+            color: #fff;
+        }
+
+        /* extra spacing */
+        .p-0 {
+            padding: 0;
+        }
+        .p-16 {
+            padding: 16px;
+        }
+        .p-20 {
+            padding: 20px;
+        }
+        .p-24 {
+            padding: 24px;
+        }
+        .mb-0 {
+            margin-bottom: 0;
+        }
+        .mb-8 {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══ TOP BAR ═══ -->
+    <header class="top-bar">
+        <div>
+            <div class="brand"><i class="fas fa-car"></i>Porsche<span>AG</span></div>
+            <div class="sub">2026 · Executive Command Center · Multi-Vector Crisis Matrix</div>
+        </div>
+        <div class="status"><i class="fas fa-circle" style="color:var(--accent-green);font-size:0.5rem;margin-right:6px;"></i>WAR ROOM · LIVE</div>
+    </header>
+
+    <!-- ═══ NAV DOCK ═══ -->
+    <nav class="nav-dock" id="navDock">
+        <button class="nav-btn active" data-page="0"><i class="fas fa-chart-pie"></i>Overview</button>
+        <button class="nav-btn" data-page="1"><i class="fas fa-history"></i>Crisis Deep History</button>
+        <button class="nav-btn" data-page="2"><i class="fas fa-user"></i>Aviraj · ENFP-T</button>
+        <button class="nav-btn" data-page="3"><i class="fas fa-user"></i>Amaan · ISFJ-T</button>
+        <button class="nav-btn" data-page="4"><i class="fas fa-user"></i>Krrish · ENTP-A</button>
+        <button class="nav-btn" data-page="5"><i class="fas fa-user"></i>Sunay · ISFJ-T</button>
+        <button class="nav-btn" data-page="6"><i class="fas fa-user"></i>Riaan · ENFP-T</button>
+        <button class="nav-btn" data-page="7"><i class="fas fa-user"></i>Devansh · ESFP</button>
+        <button class="nav-btn" data-page="8"><i class="fas fa-handshake"></i>Collaboration</button>
+        <button class="nav-btn" data-page="9"><i class="fas fa-road"></i>Strategic Roadmap</button>
+        <button class="nav-btn" data-page="10"><i class="fas fa-microchip"></i>Operational Metrics</button>
+        <button class="nav-btn" data-page="11"><i class="fas fa-globe"></i>Market Intelligence</button>
+        <button class="nav-btn" data-page="12"><i class="fas fa-brain"></i>Leadership Insights</button>
+    </nav>
+
+    <!-- ═══ APP WRAP ═══ -->
+    <div class="app-wrap">
+
+        <!-- ─── SIDEBAR ─── -->
+        <aside class="sidebar-timeline">
+            <div class="head">
+                <span><i class="fas fa-timeline" style="margin-right:8px;color:var(--porsche-red);"></i>Crisis Timeline</span>
+                <span>1992 – 2026</span>
+            </div>
+            <div class="timeline-scroll">
+                <div class="tl-item"><div class="yr">1992–1993</div><div class="ttl">Near-Bankruptcy</div><div class="desc">Sales crash to 14k units. Wiedeking's lean production &amp; Boxster save the brand.</div></div>
+                <div class="tl-item" style="border-left-color:var(--porsche-gold);"><div class="yr">2002</div><div class="ttl">Cayenne Backlash</div><div class="desc">Purists revolt against SUV; Cayenne becomes high-margin pillar.</div></div>
+                <div class="tl-item"><div class="yr">2008–2009</div><div class="ttl">VW Takeover Debt Crisis</div><div class="desc">Leveraged buyout fails; forced integration into VW Group.</div></div>
+                <div class="tl-item" style="border-left-color:var(--accent-purple);"><div class="yr">2015–2016</div><div class="ttl">Dieselgate Fallout</div><div class="desc">V6 TDI fines; diesel terminated; Taycan EV program launched.</div></div>
+                <div class="tl-item" style="border-left-color:var(--accent-green);"><div class="yr">2021–2022</div><div class="ttl">Supply Chain Crisis</div><div class="desc">Chip shortages &amp; Ukraine war halt assembly lines.</div></div>
+                <div class="tl-item" style="border-left-color:var(--accent-cyan);"><div class="yr">2024</div><div class="ttl">China Deceleration</div><div class="desc">Local EV price war compresses luxury sales in China.</div></div>
+                <div class="tl-item" style="border-left-color:var(--porsche-red);"><div class="yr">2026 (ACTIVE)</div><div class="ttl">Triple Threat</div><div class="desc">China demand drop · Cariad delays · EV adoption shifts.</div></div>
+            </div>
+        </aside>
+
+        <!-- ─── MAIN ─── -->
+        <main>
+
+            <!-- ═══ PAGE 0: OVERVIEW ═══ -->
+            <section class="page-content active" id="page-0">
+                <div class="glass" style="padding:28px;">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-pie"></i>2026 Macro Analysis &amp; Strategic Briefing</h2>
+                        <span class="pill">WAR ROOM OVERVIEW</span>
+                    </div>
+
+                    <p class="body-text"><strong>Three simultaneous crises</strong> — China demand contraction (<span class="highlight-red">-26.4%</span> YoY), Cariad software delays (<span class="highlight-cyan">+18 months</span>), and a deceleration in Western EV adoption — are compressing Porsche's operating margin to a projected floor of <span class="highlight-red">10.8%</span>. The executive team must execute a coordinated multi-vector response to preserve brand equity, liquidity, and operational flexibility.</p>
+
+                    <div class="kpi-grid">
+                        <div class="kpi-card"><div class="lbl">China Sales Shift</div><div class="num red">-26.4%</div></div>
+                        <div class="kpi-card"><div class="lbl">Op. Margin Floor</div><div class="num gold">10.8%</div></div>
+                        <div class="kpi-card"><div class="lbl">Cariad Delay</div><div class="num cyan">+18 Mos</div></div>
+                        <div class="kpi-card"><div class="lbl">Revenue at Risk</div><div class="num red">€2.8B</div></div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div>
+                            <div style="font-weight:700;color:var(--text-primary);font-size:0.8rem;font-family:var(--font-mono);margin-bottom:6px;"><i class="fas fa-chart-line" style="color:var(--porsche-red);margin-right:6px;"></i>Margin vs China Deliveries</div>
+                            <div class="chart-wrap"><canvas id="ch0"></canvas></div>
+                            <p style="font-size:0.7rem;color:var(--text-muted);margin-top:6px;font-style:italic;">Operating margin declines from 18.6% (2023) to 10.8% (2026), mirroring China delivery slump.</p>
+                        </div>
+                        <div>
+                            <div style="font-weight:700;color:var(--text-primary);font-size:0.8rem;font-family:var(--font-mono);margin-bottom:6px;"><i class="fas fa-map-marked-alt" style="color:var(--porsche-gold);margin-right:6px;"></i>Regional Deliveries (k units)</div>
+                            <div class="chart-wrap"><canvas id="ch1"></canvas></div>
+                            <p style="font-size:0.7rem;color:var(--text-muted);margin-top:6px;font-style:italic;">North America &amp; Europe stable; China compression drives overall decline.</p>
+                        </div>
+                    </div>
+
+                    <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:18px;border:1px solid rgba(0,0,0,0.04);">
+                        <div style="font-weight:800;color:var(--porsche-gold);margin-bottom:8px;font-family:var(--font-display);"><i class="fas fa-microscope" style="margin-right:8px;"></i>Deep Analytical Breakdown</div>
+                        <p class="body-text"><strong>Chart 1 (Margin vs China):</strong> The correlation between China deliveries and operating margin is statistically significant (r = 0.89). Each 10% drop in China volume corresponds to approximately 1.2 percentage points of margin erosion. The recovery trajectory assumes a rebound in China premium segment demand by late 2027, supported by localized production and EV incentives.</p>
+                        <p class="body-text"><strong>Chart 2 (Regional Deliveries):</strong> North American volumes show resilience (+3.2% YoY in 2026) due to strong 911 and Cayenne demand. Europe (ex-Germany) remains stable with PHEV adoption driving Macan and Panamera sales. China's share of global deliveries falls from 28% (2023) to 18% (2026 projected).</p>
+                    </div>
+                </div>
+
+                <div class="glass" style="padding:28px;margin-top:24px;">
+                    <div class="card-header">
+                        <h2><i class="fas fa-project-diagram"></i>Crisis Interdependency Map</h2>
+                        <span class="pill gold">SYSTEM DYNAMICS</span>
+                    </div>
+                    <p class="body-text">The three crises are <strong>interdependent</strong>: China's EV price war reduces revenue, limiting R&amp;D investment for software catch-up, while shifting consumer preferences toward hybrids (PHEV) and eFuels create new opportunities. The team's MBTI diversity enables a balanced response — <strong>Ne-dominant</strong> profiles identify market pivots, <strong>Si-dominant</strong> profiles enforce operational discipline, and <strong>Feeling</strong> profiles maintain stakeholder alignment.</p>
+                    <div class="grid-3">
+                        <div class="kpi-card" style="border-left:3px solid var(--porsche-red);"><div class="lbl">Revenue at Risk</div><div class="num red">€2.8B</div></div>
+                        <div class="kpi-card" style="border-left:3px solid var(--porsche-gold);"><div class="lbl">Margin Recovery Target</div><div class="num gold">18.2%</div></div>
+                        <div class="kpi-card" style="border-left:3px solid var(--accent-cyan);"><div class="lbl">Software Catch-up Window</div><div class="num cyan">12 Mos</div></div>
+                    </div>
+                    <div class="tag-cloud">
+                        <span class="tag gold">China EV Price War</span>
+                        <span class="tag cyan">Cariad Delays</span>
+                        <span class="tag">EV Adoption Shift</span>
+                        <span class="tag gold">PHEV Opportunity</span>
+                        <span class="tag cyan">eFuel Expansion</span>
+                        <span class="tag">ICE Resilience</span>
+                    </div>
+                    <div class="quote-block">
+                        "The 2026 crisis is not a single shock but a confluence of structural shifts. Our response must be equally multi-dimensional — balancing short-term liquidity with long-term strategic repositioning."
+                        <div class="attrib">— Executive Strategy Note, 2026</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ PAGE 1: CRISIS DEEP HISTORY ═══ -->
+            <section class="page-content" id="page-1">
+                <div class="glass" style="padding:28px;">
+                    <div class="card-header">
+                        <h2><i class="fas fa-history"></i>Porsche Crisis Deep History · 1992–2026</h2>
+                        <span class="pill">HISTORICAL ANALYSIS</span>
+                    </div>
+                    <p class="body-text">Porsche's history is defined by <strong>repeated near-collapse and reinvention</strong>. Each crisis has forged the brand's resilience, operational discipline, and engineering excellence. The 2026 crisis is the latest chapter in this cycle — but with a <strong>unique structural complexity</strong> that demands an unprecedented level of coordination.</p>
+
+                    <div class="counter-wrap" style="margin-bottom:20px;">
+                        <div class="counter-item"><div class="number">7</div><div class="label">Major Crises</div></div>
+                        <div class="counter-item"><div class="number">34</div><div class="label">Years of Resilience</div></div>
+                        <div class="counter-item"><div class="number">100%</div><div class="label">Survival Rate</div></div>
+                        <div class="counter-item"><div class="number">6</div><div class="label">Leadership Transitions</div></div>
+                    </div>
+
+                    <div class="crisis-block">
+                        <div class="year">1992–1993 · NEAR-BANKRUPTCY</div>
+                        <div class="headline">The Boxster Pivot &amp; Lean Production</div>
+                        <div class="detail">Sales plummeted to just <strong>14,000 units</strong> annually — a 42% drop from 1990 peaks. CEO Wendelin Wiedeking introduced Japanese lean manufacturing principles, cutting production costs by 30% and launching the <strong>Boxster</strong> at a price point that re-engaged the market. The Boxster became Porsche's volume leader, selling over 120,000 units in its first five years. <strong>Key lesson:</strong> Operational efficiency and accessible product positioning can offset even the deepest market downturns. <span class="mini-badge red">Revenue Impact: -42%</span> <span class="mini-badge gold">Recovery: 24 mos</span></div>
+                    </div>
+
+                    <div class="crisis-block" style="border-left-color:var(--porsche-gold);">
+                        <div class="year">2002 · CAYENNE BACKLASH</div>
+                        <div class="headline">The SUV That Saved Porsche</div>
+                        <div class="detail">Purists condemned the Cayenne as a betrayal of Porsche's sports car heritage — one enthusiast publication ran a cover headlined <em>"The End of Porsche."</em> Yet the Cayenne became Porsche's <strong>high-margin volume engine</strong>, generating over €2.5 billion in annual revenue by 2005 and funding the development of the 918 Spyder, the Panamera, and the next-generation 911. By 2008, Cayenne sales accounted for 35% of global volume. <strong>Key lesson:</strong> Brand expansion must be engineered with excellence, not just commercial opportunism. <span class="mini-badge gold">Revenue Impact: -12%</span> <span class="mini-badge cyan">Recovery: 12 mos</span></div>
+                    </div>
+
+                    <div class="crisis-block" style="border-left-color:var(--accent-purple);">
+                        <div class="year">2008–2009 · VW TAKEOVER DEBT CRISIS</div>
+                        <div class="headline">Leveraged Buyout Collapse</div>
+                        <div class="detail">Porsche attempted a leveraged buyout of Volkswagen, amassing over €10 billion in debt. The global credit squeeze derailed the plan, and Porsche faced a liquidity crisis that forced a <strong>structural integration</strong> with the VW Group. The deal ultimately made VW the majority owner of Porsche, reversing the original ambition. <strong>Key lesson:</strong> Financial leverage must be balanced with liquidity buffers — a lesson that informs the current capital preservation strategy. <span class="mini-badge red">Revenue Impact: -29%</span> <span class="mini-badge gold">Recovery: 36 mos</span></div>
+                    </div>
+
+                    <div class="crisis-block" style="border-left-color:var(--accent-cyan);">
+                        <div class="year">2015–2016 · DIESELGATE FALLOUT</div>
+                        <div class="headline">The End of Diesel &amp; Birth of Taycan</div>
+                        <div class="detail">VW Group's diesel emissions scandal led to <strong>regulatory fines exceeding €1.5 billion</strong> and significant reputational damage. Porsche terminated its diesel technology entirely and accelerated the <strong>Taycan</strong> EV program — a strategic pivot that redefined the brand's future. The Taycan launched in 2019 to critical acclaim, becoming the best-selling EV in its segment in Europe. <strong>Key lesson:</strong> Regulatory shocks can catalyze innovation, but timing is critical. <span class="mini-badge cyan">Revenue Impact: -8%</span> <span class="mini-badge green">Recovery: 18 mos</span></div>
+                    </div>
+
+                    <div class="crisis-block" style="border-left-color:var(--accent-green);">
+                        <div class="year">2021–2022 · SUPPLY CHAIN BOTTLENECKS</div>
+                        <div class="headline">Chips, Harnesses &amp; Assembly Halts</div>
+                        <div class="detail">Global semiconductor shortages and the Ukraine war disrupted harness supplies, forcing <strong>production stoppages</strong> in Leipzig and Zuffenhausen — totaling 12 weeks of lost output in 2022. Porsche prioritized high-margin models (911, Cayenne) to maintain profitability, resulting in a 16% revenue impact but only a 7% margin hit. <strong>Key lesson:</strong> Supply chain diversification and production flexibility are non-negotiable. <span class="mini-badge red">Revenue Impact: -16%</span> <span class="mini-badge gold">Recovery: 20 mos</span></div>
+                    </div>
+
+                    <div class="crisis-block" style="border-left-color:var(--porsche-red);">
+                        <div class="year">2024–2026 · CHINA DECELERATION &amp; SOFTWARE DELAYS</div>
+                        <div class="headline">The Triple Threat</div>
+                        <div class="detail">China's domestic EV manufacturers (BYD, NIO, Xpeng) aggressively price-cut luxury segments, compressing Porsche's China volumes by <strong>26.4%</strong> in 2026. Simultaneously, VW Group's Cariad division delayed critical software platforms by <strong>18 months</strong>, impacting next-generation vehicle launches. Western EV adoption slowed as consumers shifted toward <strong>hybrids and ICE</strong>, creating a complex demand mix. <strong>Key lesson:</strong> Agility in software development and product mix is essential — and requires a new kind of leadership. <span class="mini-badge red">Revenue Impact: -26%</span> <span class="mini-badge gold">Recovery: 24–36 mos</span></div>
+                    </div>
+
+                    <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;border:1px solid rgba(0,0,0,0.04);margin-top:16px;">
+                        <div style="font-weight:800;color:var(--text-primary);font-size:0.9rem;margin-bottom:8px;"><i class="fas fa-chart-bar" style="color:var(--porsche-gold);margin-right:8px;"></i>Crisis Impact Matrix</div>
+                        <table class="p-table">
+                            <thead><tr><th>Crisis</th><th>Revenue Impact</th><th>Margin Impact</th><th>Recovery Time</th><th>Key Strategy</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>1992–1993</strong></td><td><span class="highlight-red">-42%</span></td><td>-18pp</td><td>24 mos</td><td>Lean production + Boxster</td></tr>
+                                <tr><td><strong>2002</strong></td><td>-12%</td><td>-6pp</td><td>12 mos</td><td>Cayenne expansion</td></tr>
+                                <tr><td><strong>2008–2009</strong></td><td><span class="highlight-red">-29%</span></td><td>-14pp</td><td>36 mos</td><td>VW integration</td></tr>
+                                <tr><td><strong>2015–2016</strong></td><td>-8%</td><td>-4pp</td><td>18 mos</td><td>Taycan development</td></tr>
+                                <tr><td><strong>2021–2022</strong></td><td>-16%</td><td>-7pp</td><td>20 mos</td><td>Supply chain diversification</td></tr>
+                                <tr><td><strong>2024–2026</strong></td><td><span class="highlight-red">-26%</span></td><td><span class="highlight-red">-8pp</span></td><td>24–36 mos</td><td>Flexible powertrains + software decoupling</td></tr>
+                            </tbody>
+                        </table>
+                        <p style="font-size:0.78rem;color:var(--text-muted);margin-top:10px;font-style:italic;"><strong>Analysis:</strong> The 2026 crisis is the most structurally complex in Porsche's history, combining demand, supply, and technological shocks. However, the team's MBTI diversity — pairing Ne-driven innovators with Si-driven operators — provides a robust response architecture.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ PAGE 2: AVIRAJ ═══ -->
+            <section class="page-content" id="page-2">
+                <div class="glass" style="padding:28px;">
+                    <div class="profile-banner">
+                        <div class="avatar" style="background:linear-gradient(135deg,#6c3cb0,var(--porsche-red));">AV</div>
+                        <div><div class="name">Aviraj</div><div class="subtitle"><i class="fas fa-bolt"></i>ENFP-T · "The Visionary Campaigner"</div></div>
+                    </div>
+
+                    <div style="font-weight:700;color:var(--text-primary);font-size:0.75rem;font-family:var(--font-mono);margin-bottom:4px;">PSYCHOMETRIC PROFILE</div>
+                    <div class="mbti-grid">
+                        <div class="mbti-box"><div class="label"><span>Extraversion</span><span class="val">78%</span></div><div class="mbti-bar"><div class="fill" style="width:78%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Intuition (Ne)</span><span class="val">89%</span></div><div class="mbti-bar"><div class="fill" style="width:89%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Feeling (Fi)</span><span class="val">68%</span></div><div class="mbti-bar"><div class="fill" style="width:68%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Perceiving</span><span class="val">74%</span></div><div class="mbti-bar"><div class="fill" style="width:74%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Turbulence</span><span class="val">84%</span></div><div class="mbti-bar"><div class="fill" style="width:84%;"></div></div></div>
+                    </div>
+
+                    <div class="car-match">
+                        <div class="car-img">
+                            <img src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=800&q=80" alt="Porsche Taycan Turbo S" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'font-family:var(--font-display);color:var(--porsche-gold);font-size:1.2rem;\'>PORSCHE TAYCAN TURBO S</div><div style=\'font-size:0.7rem;color:var(--text-muted);\'>Electrifying · Forward-looking · Transformative</div>';">
+                            <div class="badge"><i class="fas fa-bolt" style="margin-right:4px;"></i>Spirit Match: Taycan Turbo S</div>
+                        </div>
+                        <div class="info"><h3>Porsche Taycan Turbo S</h3><p class="body-text" style="font-size:0.88rem;"><strong>Why the match:</strong> Electrifying, forward-looking, and transformative. The Taycan anchored Porsche's high-voltage electrification strategy. Aviraj uses strategic vision to steer the brand through industry transitions, identifying new market opportunities and redefining customer engagement.</p></div>
+                    </div>
+
+                    <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid rgba(0,0,0,0.04);">
+                        <div class="flex-between"><span style="font-weight:800;color:var(--text-primary);"><i class="fas fa-clipboard-list" style="color:var(--accent-cyan);margin-right:8px;"></i>2026 Crisis Response Playbook</span><span class="pill cyan">DEPLOYMENT</span></div>
+                        <div class="step"><div class="title">PHASE 1 · Days 0–30: Dealer Network Re-engagement</div><div class="desc">Launch an executive dealer summit across Asian markets to re-align franchise partners, introducing targeted inventory support and revised showroom quotas. <strong>Key metric:</strong> Dealer morale index from 42% → 78%.</div></div>
+                        <div class="step"><div class="title">PHASE 2 · Days 30–90: Investor Narrative Re-alignment</div><div class="desc">Lead capital market briefings positioning Porsche's balanced powertrain approach (ICE, PHEV, BEV) as a flexible strength during EV adoption adjustments. <strong>Key metric:</strong> Brand premium preservation from -14% → +5%.</div></div>
+                        <div class="step"><div class="title">PHASE 3 · Days 90–360: Experiential Marketing Campaigns</div><div class="desc">Redirect regional marketing budgets toward high-touch driving experiences and brand heritage events to support customer engagement and pricing stability. <strong>Key metric:</strong> Customer retention from 61% → 75%.</div></div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;border:1px solid rgba(0,0,0,0.04);">
+                            <div style="font-weight:800;color:var(--text-primary);margin-bottom:10px;"><i class="fas fa-brain" style="color:var(--accent-purple);margin-right:8px;"></i>Cognitive Stack</div>
+                            <ul class="blist">
+                                <li><strong>Dominant (Ne):</strong> Identifies emerging trends and alternative market channels during structural shifts. Scans for white-space opportunities.</li>
+                                <li><strong>Auxiliary (Fi):</strong> Evaluates decisions against brand heritage and core identity values. Ensures strategic moves feel authentic.</li>
+                                <li><strong>Tertiary (Te):</strong> Organizes execution roadmaps when working under timeline constraints. Brings structure to vision.</li>
+                                <li><strong>Inferior (Si):</strong> Vulnerable under stress to neglecting established operational processes. Benefits from pairing with Si-dominant partners.</li>
+                            </ul>
+                        </div>
+                        <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;border:1px solid rgba(0,0,0,0.04);">
+                            <div style="font-weight:800;color:var(--text-primary);margin-bottom:10px;"><i class="fas fa-chart-simple" style="color:var(--porsche-gold);margin-right:8px;"></i>KPI Dashboard</div>
+                            <table class="p-table">
+                                <thead><tr><th>Metric</th><th>Current</th><th>Goal</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Asian Dealer Morale</td><td>42%</td><td><span class="highlight-gold">&gt;78%</span></td></tr>
+                                    <tr><td>Brand Premium</td><td>-14%</td><td><span class="highlight-gold">+5%</span></td></tr>
+                                    <tr><td>Customer Retention</td><td>61%</td><td><span class="highlight-gold">75%</span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:14px;border:1px solid rgba(0,0,0,0.04);margin-top:6px;">
+                        <div style="font-size:0.8rem;color:var(--text-secondary);"><strong><i class="fas fa-lightbulb" style="color:var(--porsche-gold);margin-right:6px;"></i>Insight:</strong> Aviraj's ENFP-T profile is ideal for <strong>crisis communication and stakeholder alignment</strong>. His high Ne and Fi allow him to craft compelling narratives that resonate emotionally while remaining strategically sound. However, his turbulence (84%) means he thrives under pressure but needs structured support for follow-through — making his pairing with Amaan (ISFJ-T) critical for execution.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ PAGE 3: AMAAN ═══ -->
+            <section class="page-content" id="page-3">
+                <div class="glass" style="padding:28px;">
+                    <div class="profile-banner">
+                        <div class="avatar" style="background:linear-gradient(135deg,var(--porsche-red),#800000);">AM</div>
+                        <div><div class="name">Amaan</div><div class="subtitle"><i class="fas fa-shield-alt"></i>ISFJ-T · "The Disciplined Defender"</div></div>
+                    </div>
+
+                    <div style="font-weight:700;color:var(--text-primary);font-size:0.75rem;font-family:var(--font-mono);margin-bottom:4px;">PSYCHOMETRIC PROFILE</div>
+                    <div class="mbti-grid">
+                        <div class="mbti-box"><div class="label"><span>Introversion</span><span class="val">82%</span></div><div class="mbti-bar"><div class="fill" style="width:82%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Sensing (Si)</span><span class="val">88%</span></div><div class="mbti-bar"><div class="fill" style="width:88%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Feeling (Fe)</span><span class="val">64%</span></div><div class="mbti-bar"><div class="fill" style="width:64%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Judging</span><span class="val">79%</span></div><div class="mbti-bar"><div class="fill" style="width:79%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Turbulence</span><span class="val">71%</span></div><div class="mbti-bar"><div class="fill" style="width:71%;"></div></div></div>
+                    </div>
+
+                    <div class="car-match">
+                        <div class="car-img">
+                            <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80" alt="Porsche 959" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'font-family:var(--font-display);color:var(--porsche-gold);font-size:1.2rem;\'>PORSCHE 959</div><div style=\'font-size:0.7rem;color:var(--text-muted);\'>Precision · Structural Stability · Control</div>';">
+                            <div class="badge"><i class="fas fa-microchip" style="margin-right:4px;"></i>Spirit Match: Porsche 959</div>
+                        </div>
+                        <div class="info"><h3>Porsche 959</h3><p class="body-text" style="font-size:0.88rem;"><strong>Why the match:</strong> Engineered for precision, structural stability, and control. The 959 was Porsche's technological tour de force — and Amaan provides that same systematic financial oversight to protect capital liquidity under economic volatility.</p></div>
+                    </div>
+
+                    <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid rgba(0,0,0,0.04);">
+                        <div class="flex-between"><span style="font-weight:800;color:var(--text-primary);"><i class="fas fa-clipboard-list" style="color:var(--porsche-gold);margin-right:8px;"></i>2026 Crisis Response Playbook</span><span class="pill gold">DEPLOYMENT</span></div>
+                        <div class="step"><div class="title">PHASE 1 · Days 0–30: Zero-Based Capital Audit</div><div class="desc">Implement a temporary capital expenditure freeze on non-essential facility upgrades, preserving operational liquidity buffers. <strong>Key metric:</strong> Free cash flow reserves from €1.2B → €2.5B.</div></div>
+                        <div class="step"><div class="title">PHASE 2 · Days 30–90: Supplier Procurement Re-negotiation</div><div class="desc">Renegotiate battery cell procurement minimums to align with revised EV assembly targets, lowering inventory holding costs. <strong>Key metric:</strong> Supplier penalty avoidance from €120M risk → €0.</div></div>
+                        <div class="step"><div class="title">PHASE 3 · Days 90–360: Fixed Cost Optimization</div><div class="desc">Implement cost-containment measures across corporate overhead, protecting the company's operating margin floor during market adjustments. <strong>Key metric:</strong> OpEx overhead reduction from 0% → -12%.</div></div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;border:1px solid rgba(0,0,0,0.04);">
+                            <div style="font-weight:800;color:var(--text-primary);margin-bottom:10px;"><i class="fas fa-brain" style="color:var(--accent-purple);margin-right:8px;"></i>Cognitive Stack</div>
+                            <ul class="blist">
+                                <li><strong>Dominant (Si):</strong> Tracks historical cost parameters and operational risk boundaries. Maintains institutional memory.</li>
+                                <li><strong>Auxiliary (Fe):</strong> Maintains working relationships across departmental finance teams during cost reviews. Builds consensus around cuts.</li>
+                                <li><strong>Tertiary (Ti):</strong> Analyzes unit economics to locate efficiency improvements across operations. Brings analytical rigor.</li>
+                                <li><strong>Inferior (Ne):</strong> Prefers structured planning over unmapped operational pivots. Needs support for unexpected changes.</li>
+                            </ul>
+                        </div>
+                        <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;border:1px solid rgba(0,0,0,0.04);">
+                            <div style="font-weight:800;color:var(--text-primary);margin-bottom:10px;"><i class="fas fa-chart-simple" style="color:var(--porsche-gold);margin-right:8px;"></i>KPI Dashboard</div>
+                            <table class="p-table">
+                                <thead><tr><th>Metric</th><th>Current</th><th>Goal</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Free Cash Flow Reserves</td><td>€1.2B</td><td><span class="highlight-gold">&gt;€2.5B</span></td></tr>
+                                    <tr><td>OpEx Overhead Reduction</td><td>0%</td><td><span class="highlight-gold">-12%</span></td></tr>
+                                    <tr><td>Supplier Penalty Avoidance</td><td>€120M</td><td><span class="highlight-gold">€0</span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:14px;border:1px solid rgba(0,0,0,0.04);margin-top:6px;">
+                        <div style="font-size:0.8rem;color:var(--text-secondary);"><strong><i class="fas fa-lightbulb" style="color:var(--porsche-gold);margin-right:6px;"></i>Insight:</strong> Amaan's ISFJ-T profile is the <strong>bedrock of financial discipline</strong>. His high Si and Judging preference make him exceptionally reliable in tracking and controlling costs. His turbulence (71%) drives vigilance, but he can become overly cautious — making his pairing with Krrish (ENTP-A) essential for balancing risk with innovation.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ PAGE 4: KRRISH ═══ -->
+            <section class="page-content" id="page-4">
+                <div class="glass" style="padding:28px;">
+                    <div class="profile-banner">
+                        <div class="avatar" style="background:linear-gradient(135deg,var(--porsche-gold),#805b00);">KR</div>
+                        <div><div class="name">Krrish</div><div class="subtitle"><i class="fas fa-comment-dots"></i>ENTP-A · "The Debater &amp; Strategist"</div></div>
+                    </div>
+
+                    <div style="font-weight:700;color:var(--text-primary);font-size:0.75rem;font-family:var(--font-mono);margin-bottom:4px;">PSYCHOMETRIC PROFILE</div>
+                    <div class="mbti-grid">
+                        <div class="mbti-box"><div class="label"><span>Extraversion</span><span class="val">81%</span></div><div class="mbti-bar"><div class="fill" style="width:81%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Intuition (Ne)</span><span class="val">92%</span></div><div class="mbti-bar"><div class="fill" style="width:92%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Thinking (Ti)</span><span class="val">86%</span></div><div class="mbti-bar"><div class="fill" style="width:86%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Perceiving</span><span class="val">77%</span></div><div class="mbti-bar"><div class="fill" style="width:77%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Assertiveness</span><span class="val">88%</span></div><div class="mbti-bar"><div class="fill" style="width:88%;"></div></div></div>
+                    </div>
+
+                    <div class="car-match">
+                        <div class="car-img">
+                            <img src="https://images.unsplash.com/photo-1611245141748-03f42b32f2ec?auto=format&fit=crop&w=800&q=80" alt="Porsche Carrera GT" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'font-family:var(--font-display);color:var(--porsche-gold);font-size:1.2rem;\'>PORSCHE CARRERA GT</div><div style=\'font-size:0.7rem;color:var(--text-muted);\'>Uncompromising · Direct · Technical</div>';">
+                            <div class="badge"><i class="fas fa-cog" style="margin-right:4px;"></i>Spirit Match: Carrera GT</div>
+                        </div>
+                        <div class="info"><h3>Porsche Carrera GT</h3><p class="body-text" style="font-size:0.88rem;"><strong>Why the match:</strong> Uncompromising, direct, and technical. The Carrera GT mirrors Krrish's willingness to challenge standard processes to fix engineering and operational bottlenecks — a perfect match for the Cariad software crisis.</p></div>
+                    </div>
+
+                    <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid rgba(0,0,0,0.04);">
+                        <div class="flex-between"><span style="font-weight:800;color:var(--text-primary);"><i class="fas fa-clipboard-list" style="color:var(--accent-purple);margin-right:8px;"></i>2026 Crisis Response Playbook</span><span class="pill purple">DEPLOYMENT</span></div>
+                        <div class="step"><div class="title">PHASE 1 · Days 0–30: Cariad Software Audit</div><div class="desc">Conduct an engineering review of the Cariad software stack, isolating core platform features required for immediate vehicle launches. <strong>Key metric:</strong> Software delivery delay from +18 mos → &lt;3 mos.</div></div>
+                        <div class="step"><div class="title">PHASE 2 · Days 30–90: Autonomous Porsche OS Cell</div><div class="desc">Establish an internal software taskforce to accelerate in-house infotainment and UI/UX development for upcoming models. <strong>Key metric:</strong> In-house OS integration from 15% → 85%.</div></div>
+                        <div class="step"><div class="title">PHASE 3 · Days 90–360: Platform Decoupling</div><div class="desc">Decouple Porsche's electronic control units from shared group software architectures, reducing dependencies on external launch schedules. <strong>Key metric:</strong> Critical bug backlog from 420 → &lt;25.</div></div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;border:1px solid rgba(0,0,0,0.04);">
+                            <div style="font-weight:800;color:var(--text-primary);margin-bottom:10px;"><i class="fas fa-brain" style="color:var(--accent-purple);margin-right:8px;"></i>Cognitive Stack</div>
+                            <ul class="blist">
+                                <li><strong>Dominant (Ne):</strong> Explores non-traditional platform alternatives and modular software strategies. Sees around corners.</li>
+                                <li><strong>Auxiliary (Ti):</strong> Evaluates codebase efficiency and systemic technical architecture. Brings razor-sharp analysis.</li>
+                                <li><strong>Tertiary (Fe):</strong> Uses constructive debate to re-align engineering priorities under pressure. Persuades through logic.</li>
+                                <li><strong>Inferior (Si):</strong> Avoids rigid administrative reporting in favor of agile development cycles. Needs structure around him.</li>
+                            </ul>
+                        </div>
+                        <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;border:1px solid rgba(0,0,0,0.04);">
+                            <div style="font-weight:800;color:var(--text-primary);margin-bottom:10px;"><i class="fas fa-chart-simple" style="color:var(--porsche-gold);margin-right:8px;"></i>KPI Dashboard</div>
+                            <table class="p-table">
+                                <thead><tr><th>Metric</th><th>Current</th><th>Goal</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Software Delivery Delay</td><td>+18 Mos</td><td><span class="highlight-gold">&lt;3 Mos</span></td></tr>
+                                    <tr><td>In-House OS Integration</td><td>15%</td><td><span class="highlight-gold">85%</span></td></tr>
+                                    <tr><td>Critical Bug Backlog</td><td>420</td><td><span class="highlight-gold">&lt;25</span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:14px;border:1px solid rgba(0,0,0,0.04);margin-top:6px;">
+                        <div style="font-size:0.8rem;color:var(--text-secondary);"><strong><i class="fas fa-lightbulb" style="color:var(--porsche-gold);margin-right:6px;"></i>Insight:</strong> Krrish's ENTP-A profile is the <strong>engine of technical innovation</strong>. His dominant Ne and auxiliary Ti make him exceptionally adept at navigating complex software ecosystems. His assertiveness (88%) means he can drive change even in resistant environments — but he needs Amaan's Si to ensure that innovation is grounded in operational reality.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ PAGE 5: SUNAY ═══ -->
+            <section class="page-content" id="page-5">
+                <div class="glass" style="padding:28px;">
+                    <div class="profile-banner">
+                        <div class="avatar" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8);">SU</div>
+                        <div><div class="name">Sunay</div><div class="subtitle"><i class="fas fa-industry"></i>ISFJ-T · "The Production Defender"</div></div>
+                    </div>
+
+                    <div style="font-weight:700;color:var(--text-primary);font-size:0.75rem;font-family:var(--font-mono);margin-bottom:4px;">PSYCHOMETRIC PROFILE</div>
+                    <div class="mbti-grid">
+                        <div class="mbti-box"><div class="label"><span>Introversion</span><span class="val">79%</span></div><div class="mbti-bar"><div class="fill" style="width:79%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Sensing (Si)</span><span class="val">85%</span></div><div class="mbti-bar"><div class="fill" style="width:85%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Feeling (Fe)</span><span class="val">71%</span></div><div class="mbti-bar"><div class="fill" style="width:71%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Judging</span><span class="val">83%</span></div><div class="mbti-bar"><div class="fill" style="width:83%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Turbulence</span><span class="val">68%</span></div><div class="mbti-bar"><div class="fill" style="width:68%;"></div></div></div>
+                    </div>
+
+                    <div class="car-match">
+                        <div class="car-img">
+                            <img src="https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=800&q=80" alt="Porsche 356 Speedster" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'font-family:var(--font-display);color:var(--porsche-gold);font-size:1.2rem;\'>PORSCHE 356 SPEEDSTER</div><div style=\'font-size:0.7rem;color:var(--text-muted);\'>Pure · Structured · Foundational</div>';">
+                            <div class="badge"><i class="fas fa-clock" style="margin-right:4px;"></i>Spirit Match: 356 Speedster</div>
+                        </div>
+                        <div class="info"><h3>Porsche 356 Speedster</h3><p class="body-text" style="font-size:0.88rem;"><strong>Why the match:</strong> Pure, structured, and foundational. The 356 established Porsche's build-quality legacy. Sunay applies this focus on precision to plant operations, ensuring that flexible assembly lines maintain the brand's legendary quality.</p></div>
+                    </div>
+
+                    <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid rgba(0,0,0,0.04);">
+                        <div class="flex-between"><span style="font-weight:800;color:var(--text-primary);"><i class="fas fa-clipboard-list" style="color:var(--accent-green);margin-right:8px;"></i>2026 Crisis Response Playbook</span><span class="pill green">DEPLOYMENT</span></div>
+                        <div class="step"><div class="title">PHASE 1 · Days 0–30: Flexible Assembly Line Re-tooling</div><div class="desc">Reconfigure Zuffenhausen and Leipzig assembly lines to allow flexible scheduling between ICE, PHEV, and BEV models based on market demand. <strong>Key metric:</strong> Line flexibility index from 35% → 85%.</div></div>
+                        <div class="step"><div class="title">PHASE 2 · Days 30–90: Quality Audit Protocol</div><div class="desc">Enforce updated quality assurance steps across flexible manufacturing lines, keeping assembly defect metrics within historical ranges. <strong>Key metric:</strong> Assembly defect rate from 0.14% → &lt;0.03%.</div></div>
+                        <div class="step"><div class="title">PHASE 3 · Days 90–360: Supply Chain Localization</div><div class="desc">Strengthen second-tier supplier relationships within Europe to reduce logistics exposure and maintain manufacturing continuity. <strong>Key metric:</strong> Plant capacity utilization from 62% → &gt;91%.</div></div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;border:1px solid rgba(0,0,0,0.04);">
+                            <div style="font-weight:800;color:var(--text-primary);margin-bottom:10px;"><i class="fas fa-brain" style="color:var(--accent-purple);margin-right:8px;"></i>Cognitive Stack</div>
+                            <ul class="blist">
+                                <li><strong>Dominant (Si):</strong> Monitors assembly quality standards and manufacturing protocols. Preserves institutional knowledge.</li>
+                                <li><strong>Auxiliary (Fe):</strong> Manages communication across factory workforce teams during production line adjustments. Builds trust.</li>
+                                <li><strong>Tertiary (Ti):</strong> Analyzes manufacturing steps to reduce operational assembly delays. Brings analytical precision.</li>
+                                <li><strong>Inferior (Ne):</strong> Prefers tested production protocols over rapid, unverified line reconfigurations. Needs support for change.</li>
+                            </ul>
+                        </div>
+                        <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;border:1px solid rgba(0,0,0,0.04);">
+                            <div style="font-weight:800;color:var(--text-primary);margin-bottom:10px;"><i class="fas fa-chart-simple" style="color:var(--porsche-gold);margin-right:8px;"></i>KPI Dashboard</div>
+                            <table class="p-table">
+                                <thead><tr><th>Metric</th><th>Current</th><th>Goal</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Line Flexibility Index</td><td>35%</td><td><span class="highlight-gold">85%</span></td></tr>
+                                    <tr><td>Assembly Defect Rate</td><td>0.14%</td><td><span class="highlight-gold">&lt;0.03%</span></td></tr>
+                                    <tr><td>Plant Capacity Utilization</td><td>62%</td><td><span class="highlight-gold">&gt;91%</span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:14px;border:1px solid rgba(0,0,0,0.04);margin-top:6px;">
+                        <div style="font-size:0.8rem;color:var(--text-secondary);"><strong><i class="fas fa-lightbulb" style="color:var(--porsche-gold);margin-right:6px;"></i>Insight:</strong> Sunay's ISFJ-T profile is the <strong>guardian of production integrity</strong>. Her high Si and Judging preference make her exceptionally reliable in maintaining quality standards during periods of rapid change. Her turbulence (68%) drives vigilance without excessive anxiety — making her a stabilizing force in the executive team.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ PAGE 6: RIAAN ═══ -->
+            <section class="page-content" id="page-6">
+                <div class="glass" style="padding:28px;">
+                    <div class="profile-banner">
+                        <div class="avatar" style="background:linear-gradient(135deg,#a855f7,#581c87);">RI</div>
+                        <div><div class="name">Riaan</div><div class="subtitle"><i class="fas fa-compass"></i>ENFP-T · "The Adaptive Prospector"</div></div>
+                    </div>
+
+                    <div style="font-weight:700;color:var(--text-primary);font-size:0.75rem;font-family:var(--font-mono);margin-bottom:4px;">PSYCHOMETRIC PROFILE</div>
+                    <div class="mbti-grid">
+                        <div class="mbti-box"><div class="label"><span>Extraversion</span><span class="val">76%</span></div><div class="mbti-bar"><div class="fill" style="width:76%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Intuition (Ne)</span><span class="val">87%</span></div><div class="mbti-bar"><div class="fill" style="width:87%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Feeling (Fi)</span><span class="val">65%</span></div><div class="mbti-bar"><div class="fill" style="width:65%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Perceiving</span><span class="val">81%</span></div><div class="mbti-bar"><div class="fill" style="width:81%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Turbulence</span><span class="val">79%</span></div><div class="mbti-bar"><div class="fill" style="width:79%;"></div></div></div>
+                    </div>
+
+                    <div class="car-match">
+                        <div class="car-img">
+                            <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80" alt="Porsche 911 Targa 4S" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'font-family:var(--font-display);color:var(--porsche-gold);font-size:1.2rem;\'>PORSCHE 911 TARGA 4S</div><div style=\'font-size:0.7rem;color:var(--text-muted);\'>Adaptive · Distinctive · Versatile</div>';">
+                            <div class="badge"><i class="fas fa-arrows-spin" style="margin-right:4px;"></i>Spirit Match: 911 Targa 4S</div>
+                        </div>
+                        <div class="info"><h3>Porsche 911 Targa 4S</h3><p class="body-text" style="font-size:0.88rem;"><strong>Why the match:</strong> Adaptive, distinctive, and versatile. The Targa bridges open-air design with performance heritage, matching Riaan's focus on identifying new revenue streams during market shifts — from eFuels to hybrid expansion.</p></div>
+                    </div>
+
+                    <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid rgba(0,0,0,0.04);">
+                        <div class="flex-between"><span style="font-weight:800;color:var(--text-primary);"><i class="fas fa-clipboard-list" style="color:var(--accent-orange);margin-right:8px;"></i>2026 Crisis Response Playbook</span><span class="pill orange">DEPLOYMENT</span></div>
+                        <div class="step"><div class="title">PHASE 1 · Days 0–30: eFuel Initiative Expansion</div><div class="desc">Accelerate commercial distribution partnerships for Porsche's synthetic eFuel pilot plant in Chile, targeting existing ICE vehicle owners. <strong>Key metric:</strong> eFuel commercial volume from 130k L → &gt;2.5M L.</div></div>
+                        <div class="step"><div class="title">PHASE 2 · Days 30–90: High-Margin Hybrid Portfolio</div><div class="desc">Expand plug-in hybrid (PHEV) offerings across the Cayenne and Panamera lines to serve buyers seeking transitional technology. <strong>Key metric:</strong> PHEV mix percentage from 19% → 35%.</div></div>
+                        <div class="step"><div class="title">PHASE 3 · Days 90–360: Special Edition Customization</div><div class="desc">Expand the Porsche Exclusive Manufaktur customization program, increasing average revenue per unit through tailored options. <strong>Key metric:</strong> Options revenue/unit from €14,200 → &gt;€28,500.</div></div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;border:1px solid rgba(0,0,0,0.04);">
+                            <div style="font-weight:800;color:var(--text-primary);margin-bottom:10px;"><i class="fas fa-brain" style="color:var(--accent-purple);margin-right:8px;"></i>Cognitive Stack</div>
+                            <ul class="blist">
+                                <li><strong>Dominant (Ne):</strong> Scans international markets for emerging commercial opportunities and partnerships. Sees patterns others miss.</li>
+                                <li><strong>Auxiliary (Fi):</strong> Keeps product line expansions aligned with luxury brand positioning. Maintains authenticity.</li>
+                                <li><strong>Tertiary (Te):</strong> Structures project milestones when implementing market initiatives. Brings execution discipline.</li>
+                                <li><strong>Inferior (Si):</strong> Prefers launching new ventures over managing routine maintenance operations. Needs support for follow-through.</li>
+                            </ul>
+                        </div>
+                        <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;border:1px solid rgba(0,0,0,0.04);">
+                            <div style="font-weight:800;color:var(--text-primary);margin-bottom:10px;"><i class="fas fa-chart-simple" style="color:var(--porsche-gold);margin-right:8px;"></i>KPI Dashboard</div>
+                            <table class="p-table">
+                                <thead><tr><th>Metric</th><th>Current</th><th>Goal</th></tr></thead>
+                                <tbody>
+                                    <tr><td>eFuel Commercial Volume</td><td>130k L</td><td><span class="highlight-gold">&gt;2.5M L</span></td></tr>
+                                    <tr><td>PHEV Mix Percentage</td><td>19%</td><td><span class="highlight-gold">35%</span></td></tr>
+                                    <tr><td>Options Revenue / Unit</td><td>€14,200</td><td><span class="highlight-gold">&gt;€28,500</span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:14px;border:1px solid rgba(0,0,0,0.04);margin-top:6px;">
+                        <div style="font-size:0.8rem;color:var(--text-secondary);"><strong><i class="fas fa-lightbulb" style="color:var(--porsche-gold);margin-right:6px;"></i>Insight:</strong> Riaan's ENFP-T profile is the <strong>commercial engine of the team</strong>. His dominant Ne and high turbulence (79%) make him relentlessly opportunistic and adaptive — but he needs Sunay's Si to ensure that new initiatives are grounded in operational reality. Together, they form a powerful innovation-execution duo.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ PAGE 7: DEVANSH ═══ -->
+            <section class="page-content" id="page-7">
+                <div class="glass" style="padding:28px;">
+                    <div class="profile-banner">
+                        <div class="avatar" style="background:linear-gradient(135deg,var(--accent-green),#047857);">DE</div>
+                        <div><div class="name">Devansh</div><div class="subtitle"><i class="fas fa-star"></i>ESFP · "The Brand Energizer"</div></div>
+                    </div>
+
+                    <div style="font-weight:700;color:var(--text-primary);font-size:0.75rem;font-family:var(--font-mono);margin-bottom:4px;">PSYCHOMETRIC PROFILE</div>
+                    <div class="mbti-grid">
+                        <div class="mbti-box"><div class="label"><span>Extraversion</span><span class="val">89%</span></div><div class="mbti-bar"><div class="fill" style="width:89%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Sensing (Se)</span><span class="val">82%</span></div><div class="mbti-bar"><div class="fill" style="width:82%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Feeling (Fi)</span><span class="val">73%</span></div><div class="mbti-bar"><div class="fill" style="width:73%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Perceiving</span><span class="val">84%</span></div><div class="mbti-bar"><div class="fill" style="width:84%;"></div></div></div>
+                        <div class="mbti-box"><div class="label"><span>Assertiveness</span><span class="val">75%</span></div><div class="mbti-bar"><div class="fill" style="width:75%;"></div></div></div>
+                    </div>
+
+                    <div class="car-match">
+                        <div class="car-img">
+                            <img src="https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=800&q=80" alt="Porsche 718 Spyder RS" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'font-family:var(--font-display);color:var(--porsche-gold);font-size:1.2rem;\'>PORSCHE 718 SPYDER RS</div><div style=\'font-size:0.7rem;color:var(--text-muted);\'>High-Energy · Visceral · Direct</div>';">
+                            <div class="badge"><i class="fas fa-flag-checkered" style="margin-right:4px;"></i>Spirit Match: 718 Spyder RS</div>
+                        </div>
+                        <div class="info"><h3>Porsche 718 Spyder RS</h3><p class="body-text" style="font-size:0.88rem;"><strong>Why the match:</strong> High-energy, visceral, and direct. The Spyder RS emphasizes pure driver engagement — mirroring Devansh's approach to brand communication and client engagement. He brings the brand to life.</p></div>
+                    </div>
+
+                    <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid rgba(0,0,0,0.04);">
+                        <div class="flex-between"><span style="font-weight:800;color:var(--text-primary);"><i class="fas fa-clipboard-list" style="color:var(--accent-rose);margin-right:8px;"></i>2026 Crisis Response Playbook</span><span class="pill rose">DEPLOYMENT</span></div>
+                        <div class="step"><div class="title">PHASE 1 · Days 0–30: VIP Customer Retention Program</div><div class="desc">Launch targeted communications for long-standing Porsche collectors and GT vehicle owners, maintaining brand connection and allocation engagement. <strong>Key metric:</strong> VIP retention from 68% → &gt;92%.</div></div>
+                        <div class="step"><div class="title">PHASE 2 · Days 30–90: Motorsport &amp; Experience Activations</div><div class="desc">Expand customer driving events across Porsche Experience Centers globally to highlight vehicle dynamic capabilities. <strong>Key metric:</strong> Experience Center engagement from 110k → &gt;220k.</div></div>
+                        <div class="step"><div class="title">PHASE 3 · Days 90–360: Public Relations Strategy</div><div class="desc">Manage media communications surrounding technical adjustments, positioning operational updates within Porsche's broader engineering history. <strong>Key metric:</strong> Media sentiment from -22 → +45.</div></div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;border:1px solid rgba(0,0,0,0.04);">
+                            <div style="font-weight:800;color:var(--text-primary);margin-bottom:10px;"><i class="fas fa-brain" style="color:var(--accent-purple);margin-right:8px;"></i>Cognitive Stack</div>
+                            <ul class="blist">
+                                <li><strong>Dominant (Se):</strong> Responds quickly to real-time market sentiment and media coverage. Reads the room instantly.</li>
+                                <li><strong>Auxiliary (Fi):</strong> Connects directly with brand enthusiasts and vehicle owners. Builds authentic relationships.</li>
+                                <li><strong>Tertiary (Te):</strong> Coordinates event execution and promotional campaigns under tight schedules. Brings operational energy.</li>
+                                <li><strong>Inferior (Ni):</strong> Prefers immediate tactical action over extended conceptual forecasting. Needs strategic direction.</li>
+                            </ul>
+                        </div>
+                        <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;border:1px solid rgba(0,0,0,0.04);">
+                            <div style="font-weight:800;color:var(--text-primary);margin-bottom:10px;"><i class="fas fa-chart-simple" style="color:var(--porsche-gold);margin-right:8px;"></i>KPI Dashboard</div>
+                            <table class="p-table">
+                                <thead><tr><th>Metric</th><th>Current</th><th>Goal</th></tr></thead>
+                                <tbody>
+                                    <tr><td>VIP Customer Retention</td><td>68%</td><td><span class="highlight-gold">&gt;92%</span></td></tr>
+                                    <tr><td>Media Sentiment Index</td><td>-22</td><td><span class="highlight-gold">+45</span></td></tr>
+                                    <tr><td>Experience Center Engagement</td><td>110k</td><td><span class="highlight-gold">&gt;220k</span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:14px;border:1px solid rgba(0,0,0,0.04);margin-top:6px;">
+                        <div style="font-size:0.8rem;color:var(--text-secondary);"><strong><i class="fas fa-lightbulb" style="color:var(--porsche-gold);margin-right:6px;"></i>Insight:</strong> Devansh's ESFP profile is the <strong>heart of the brand</strong>. His dominant Se and auxiliary Fi make him exceptionally effective at connecting with customers and media. His assertiveness (75%) gives him the confidence to represent Porsche in high-stakes situations — making him the ideal partner for Aviraj's strategic communications.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ PAGE 8: COLLABORATION ═══ -->
+            <section class="page-content" id="page-8">
+                <div class="glass" style="padding:28px;">
+                    <div class="card-header">
+                        <h2><i class="fas fa-handshake"></i>Executive Collaboration Matrix</h2>
+                        <span class="pill gold">TEAM SYNERGY</span>
+                    </div>
+                    <p class="body-text">The team's MBTI diversity creates <strong>complementary strengths</strong>. Pairing Ne-driven innovators with Si-driven operators ensures strong starts are matched with strong finishes. Feeling-dominant profiles maintain stakeholder alignment while Thinking-dominant profiles enforce objective rigor.</p>
+
+                    <div class="grid-3" style="margin-top:16px;">
+                        <div class="collab-card" style="border-left-color:var(--porsche-red);">
+                            <div class="role">Initiative 1</div>
+                            <div class="pair"><i class="fas fa-user" style="color:var(--porsche-red);margin-right:4px;"></i>Amaan (ISFJ-T) + <i class="fas fa-user" style="color:var(--porsche-gold);margin-right:4px;"></i>Krrish (ENTP-A)</div>
+                            <div class="desc">Amaan manages operational expenditure while Krrish reorganizes software development priorities, reducing third-party reliance. <span class="mini-badge gold">Capital + Software</span></div>
+                        </div>
+                        <div class="collab-card" style="border-left-color:var(--accent-cyan);">
+                            <div class="role">Initiative 2</div>
+                            <div class="pair"><i class="fas fa-user" style="color:#3b82f6;margin-right:4px;"></i>Sunay (ISFJ-T) + <i class="fas fa-user" style="color:var(--accent-purple);margin-right:4px;"></i>Riaan (ENFP-T)</div>
+                            <div class="desc">Sunay manages flexible assembly line configuration while Riaan secures supplier agreements for hybrid components and eFuel pilot programs. <span class="mini-badge cyan">Production + Supply</span></div>
+                        </div>
+                        <div class="collab-card" style="border-left-color:var(--accent-purple);">
+                            <div class="role">Initiative 3</div>
+                            <div class="pair"><i class="fas fa-user" style="color:var(--accent-purple);margin-right:4px;"></i>Aviraj (ENFP-T) + <i class="fas fa-user" style="color:var(--accent-green);margin-right:4px;"></i>Devansh (ESFP)</div>
+                            <div class="desc">Aviraj leads investor and dealer communication while Devansh manages customer engagement and experiential marketing campaigns. <span class="mini-badge purple">Communications + Brand</span></div>
+                        </div>
+                    </div>
+
+                    <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:18px;border:1px solid rgba(0,0,0,0.04);margin-top:16px;">
+                        <div style="font-weight:800;color:var(--text-primary);font-size:0.9rem;margin-bottom:8px;"><i class="fas fa-puzzle-piece" style="color:var(--porsche-gold);margin-right:8px;"></i>MBTI Pairing Logic</div>
+                        <p class="body-text"><strong>Ne + Si pairs</strong> (Aviraj+Amaan, Riaan+Sunay) balance innovation with execution. <strong>Ti + Fe pairs</strong> (Krrish+Devansh) balance technical rigor with emotional intelligence. The <strong>Prospecting-dominant</strong> profiles (Riaan, Aviraj, Krrish) drive change; the <strong>Judging-dominant</strong> profiles (Amaan, Sunay) ensure follow-through. This creates a <strong>self-correcting system</strong> where every initiative has both a visionary and a steward.</p>
+                        <div class="tag-cloud" style="margin-top:8px;">
+                            <span class="tag gold">Ne · Innovation</span>
+                            <span class="tag cyan">Si · Execution</span>
+                            <span class="tag purple">Ti · Analysis</span>
+                            <span class="tag green">Fe · Alignment</span>
+                            <span class="tag rose">Se · Action</span>
+                            <span class="tag">Fi · Authenticity</span>
+                        </div>
+                    </div>
+
+                    <div class="grid-2" style="margin-top:16px;">
+                        <div class="insight-card">
+                            <div class="label"><i class="fas fa-arrow-right"></i> Strength 1: Diversity of Thought</div>
+                            <div class="content">The team spans <strong>six distinct MBTI types</strong>, covering all four cognitive function axes. This ensures that problems are examined from multiple perspectives — from high-level strategy (Ne) to granular execution (Si).</div>
+                        </div>
+                        <div class="insight-card" style="border-top-color:var(--porsche-gold);">
+                            <div class="label"><i class="fas fa-arrow-right"></i> Strength 2: Balanced Risk Profile</div>
+                            <div class="content">With three <strong>Prospecting</strong> and three <strong>Judging</strong> profiles, the team naturally balances risk-taking with risk-management. This is critical in a crisis where both innovation and discipline are required.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ PAGE 9: STRATEGIC ROADMAP ═══ -->
+            <section class="page-content" id="page-9">
+                <div class="glass" style="padding:28px;">
+                    <div class="card-header">
+                        <h2><i class="fas fa-road"></i>3-Phase Recovery Roadmap · 2026–2028</h2>
+                        <span class="pill">STRATEGIC PLAN</span>
+                    </div>
+                    <p class="body-text">The roadmap is designed to <strong>stabilize, adapt, and thrive</strong>. Phase 1 focuses on liquidity and software triage. Phase 2 reconfigures production and expands the powertrain portfolio. Phase 3 launches new models and recovers margin to 18.2%.</p>
+
+                    <div class="step" style="border-left-color:var(--porsche-red);">
+                        <div class="title">PHASE 1 · Months 1–6: Liquidity Preservation &amp; Software Triage</div>
+                        <div class="desc"><strong>Key actions:</strong> Capital expenditure freeze, supplier re-negotiation, Cariad software audit. <strong>Target:</strong> Free cash flow reserves to €2.5B, software delay reduced to &lt;3 months.</div>
+                    </div>
+                    <div class="step" style="border-left-color:var(--porsche-gold);">
+                        <div class="title">PHASE 2 · Months 6–18: Flexible Production &amp; Powertrain Balancing</div>
+                        <div class="desc"><strong>Key actions:</strong> Line re-tooling for flexible ICE/PHEV/BEV manufacturing, eFuel commercialization, PHEV portfolio expansion. <strong>Target:</strong> Line flexibility index to 85%, PHEV mix to 35%.</div>
+                    </div>
+                    <div class="step" style="border-left-color:var(--accent-green);">
+                        <div class="title">PHASE 3 · Months 18–36: Brand Recovery &amp; Margin Stabilization</div>
+                        <div class="desc"><strong>Key actions:</strong> New model launches, Exclusive Manufaktur expansion, margin recovery. <strong>Target:</strong> Operating margin to 18.2%, VIP retention to &gt;92%.</div>
+                    </div>
+
+                    <div class="chart-wrap tall" style="margin-top:20px;"><canvas id="ch2"></canvas></div>
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin-top:8px;font-style:italic;"><strong>Chart 3:</strong> Powertrain mix evolution. BEV share increases steadily while ICE and PHEV maintain significant share through 2026 to ensure margin stability during market adjustments.</p>
+
+                    <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;border:1px solid rgba(0,0,0,0.04);margin-top:16px;">
+                        <div style="font-weight:800;color:var(--text-primary);font-size:0.9rem;margin-bottom:6px;"><i class="fas fa-bullseye" style="color:var(--porsche-gold);margin-right:8px;"></i>Critical Success Factors</div>
+                        <div class="grid-3">
+                            <div style="padding:8px;border-radius:8px;background:rgba(0,0,0,0.02);"><strong style="color:var(--porsche-red);">1.</strong> Software decoupling within 12 months</div>
+                            <div style="padding:8px;border-radius:8px;background:rgba(0,0,0,0.02);"><strong style="color:var(--porsche-gold);">2.</strong> Production flexibility to 85% mix</div>
+                            <div style="padding:8px;border-radius:8px;background:rgba(0,0,0,0.02);"><strong style="color:var(--accent-cyan);">3.</strong> Brand premium recovery to +5%</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ PAGE 10: OPERATIONAL METRICS ═══ -->
+            <section class="page-content" id="page-10">
+                <div class="glass" style="padding:28px;">
+                    <div class="card-header">
+                        <h2><i class="fas fa-microchip"></i>Operational Metrics Dashboard</h2>
+                        <span class="pill cyan">REAL-TIME</span>
+                    </div>
+
+                    <div class="kpi-grid">
+                        <div class="kpi-card"><div class="lbl">Plant Utilization (Zuffenhausen)</div><div class="num cyan">68%</div></div>
+                        <div class="kpi-card"><div class="lbl">Assembly Defect Rate</div><div class="num green">0.09%</div></div>
+                        <div class="kpi-card"><div class="lbl">Supply Chain Lead Time</div><div class="num gold">14.2 d</div></div>
+                        <div class="kpi-card"><div class="lbl">Inventory Turnover</div><div class="num purple">8.7x</div></div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div>
+                            <div style="font-weight:700;color:var(--text-primary);font-size:0.8rem;font-family:var(--font-mono);margin-bottom:6px;"><i class="fas fa-factory" style="color:var(--porsche-red);margin-right:6px;"></i>Production Volume by Plant</div>
+                            <div class="chart-wrap small"><canvas id="ch3"></canvas></div>
+                            <p style="font-size:0.65rem;color:var(--text-muted);margin-top:4px;">Zuffenhausen: 911, 718, Taycan · Leipzig: Cayenne, Macan, Panamera</p>
+                        </div>
+                        <div>
+                            <div style="font-weight:700;color:var(--text-primary);font-size:0.8rem;font-family:var(--font-mono);margin-bottom:6px;"><i class="fas fa-clipboard-check" style="color:var(--accent-green);margin-right:6px;"></i>Quality Metrics</div>
+                            <div class="chart-wrap small"><canvas id="ch4"></canvas></div>
+                            <p style="font-size:0.65rem;color:var(--text-muted);margin-top:4px;">Defect rate (ppm) and customer complaints trending downward</p>
+                        </div>
+                    </div>
+
+                    <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;border:1px solid rgba(0,0,0,0.04);margin-top:8px;">
+                        <div style="font-weight:800;color:var(--text-primary);font-size:0.9rem;margin-bottom:6px;"><i class="fas fa-chart-line" style="color:var(--porsche-gold);margin-right:8px;"></i>Operational Efficiency Trends</div>
+                        <div class="grid-3">
+                            <div class="metric-bar-wrap"><div class="mlabel"><span>OEE (Overall Equipment Effectiveness)</span><span class="mval">82%</span></div><div class="mtrack"><div class="mfill cyan" style="width:82%;"></div></div></div>
+                            <div class="metric-bar-wrap"><div class="mlabel"><span>First Pass Yield</span><span class="mval">96.3%</span></div><div class="mtrack"><div class="mfill green" style="width:96.3%;"></div></div></div>
+                            <div class="metric-bar-wrap"><div class="mlabel"><span>On-Time Delivery</span><span class="mval">91.7%</span></div><div class="mtrack"><div class="mfill gold" style="width:91.7%;"></div></div></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ PAGE 11: MARKET INTELLIGENCE ═══ -->
+            <section class="page-content" id="page-11">
+                <div class="glass" style="padding:28px;">
+                    <div class="card-header">
+                        <h2><i class="fas fa-globe"></i>Market Intelligence · Regional Dynamics</h2>
+                        <span class="pill purple">ANALYTICS</span>
+                    </div>
+
+                    <div class="kpi-grid">
+                        <div class="kpi-card" style="border-top:3px solid var(--porsche-red);"><div class="lbl">China · Premium EV Share</div><div class="num red">↓ 8.2%</div></div>
+                        <div class="kpi-card" style="border-top:3px solid var(--porsche-gold);"><div class="lbl">Europe · PHEV Growth</div><div class="num gold">↑ 12.4%</div></div>
+                        <div class="kpi-card" style="border-top:3px solid var(--accent-green);"><div class="lbl">N.America · ICE Resilience</div><div class="num green">+2.1%</div></div>
+                        <div class="kpi-card" style="border-top:3px solid var(--accent-cyan);"><div class="lbl">eFuel Adoption Rate</div><div class="num cyan">↑ 34%</div></div>
+                    </div>
+
+                    <div class="chart-wrap" style="height:300px;"><canvas id="ch5"></canvas></div>
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin-top:6px;font-style:italic;"><strong>Chart 6:</strong> Regional delivery mix 2024 vs 2026. China's share contracts from 28% to 18% of global deliveries, while Europe and North America increase slightly. The team's strategy focuses on rebalancing toward regions with stronger PHEV and ICE demand.</p>
+
+                    <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;border:1px solid rgba(0,0,0,0.04);margin-top:16px;">
+                        <div style="font-weight:800;color:var(--porsche-gold);margin-bottom:6px;"><i class="fas fa-bullhorn" style="margin-right:8px;"></i>Key Market Insight</div>
+                        <p class="body-text">The <strong>China premium EV segment</strong> is undergoing a structural price correction. Porsche's response: shift production mix toward <strong>PHEV and ICE</strong> in Western markets while maintaining <strong>brand exclusivity</strong> in China through limited allocations and bespoke customization. Europe's PHEV growth (+12.4%) represents a significant opportunity for the Cayenne and Panamera lines.</p>
+                        <div class="tag-cloud" style="margin-top:6px;">
+                            <span class="tag gold">China · Strategic Pivot</span>
+                            <span class="tag cyan">Europe · PHEV Focus</span>
+                            <span class="tag green">N.America · ICE Stability</span>
+                            <span class="tag purple">eFuel · Growth Frontier</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ PAGE 12: LEADERSHIP INSIGHTS ═══ -->
+            <section class="page-content" id="page-12">
+                <div class="glass" style="padding:28px;">
+                    <div class="card-header">
+                        <h2><i class="fas fa-brain"></i>Leadership Insights · MBTI &amp; Management Fit</h2>
+                        <span class="pill gold">EXECUTIVE COACHING</span>
+                    </div>
+                    <p class="body-text">Each executive brings a unique cognitive profile to the table. Understanding these profiles — and their pairings — is essential for <strong>maximizing team performance</strong> during the 2026 crisis.</p>
+
+                    <div class="grid-3">
+                        <div class="insight-card" style="border-top-color:var(--accent-purple);">
+                            <div class="label"><i class="fas fa-user"></i> Aviraj · ENFP-T</div>
+                            <div class="content"><strong>Strengths:</strong> Visionary, inspiring, adaptive. <strong>Growth:</strong> Follow-through on operational details. <strong>Pair with:</strong> Amaan (ISFJ-T) for execution discipline.</div>
+                        </div>
+                        <div class="insight-card" style="border-top-color:var(--porsche-gold);">
+                            <div class="label"><i class="fas fa-user"></i> Amaan · ISFJ-T</div>
+                            <div class="content"><strong>Strengths:</strong> Structured, reliable, detail-oriented. <strong>Growth:</strong> Adapting to rapid change. <strong>Pair with:</strong> Krrish (ENTP-A) for agile problem-solving.</div>
+                        </div>
+                        <div class="insight-card" style="border-top-color:var(--accent-purple);">
+                            <div class="label"><i class="fas fa-user"></i> Krrish · ENTP-A</div>
+                            <div class="content"><strong>Strengths:</strong> Analytical, innovative, decisive. <strong>Growth:</strong> Building consensus. <strong>Pair with:</strong> Devansh (ESFP) for stakeholder alignment.</div>
+                        </div>
+                        <div class="insight-card" style="border-top-color:var(--accent-cyan);">
+                            <div class="label"><i class="fas fa-user"></i> Sunay · ISFJ-T</div>
+                            <div class="content"><strong>Strengths:</strong> Precise, committed, empathetic. <strong>Growth:</strong> Conflict resolution. <strong>Pair with:</strong> Riaan (ENFP-T) for commercial expansion.</div>
+                        </div>
+                        <div class="insight-card" style="border-top-color:var(--accent-green);">
+                            <div class="label"><i class="fas fa-user"></i> Riaan · ENFP-T</div>
+                            <div class="content"><strong>Strengths:</strong> Creative, persuasive, energetic. <strong>Growth:</strong> Sustaining focus. <strong>Pair with:</strong> Sunay (ISFJ-T) for production alignment.</div>
+                        </div>
+                        <div class="insight-card" style="border-top-color:var(--accent-rose);">
+                            <div class="label"><i class="fas fa-user"></i> Devansh · ESFP</div>
+                            <div class="content"><strong>Strengths:</strong> Charismatic, people-focused, adaptable. <strong>Growth:</strong> Strategic planning. <strong>Pair with:</strong> Aviraj (ENFP-T) for brand strategy.</div>
+                        </div>
+                    </div>
+
+                    <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:18px;border:1px solid rgba(0,0,0,0.04);margin-top:16px;">
+                        <div style="font-weight:800;color:var(--porsche-gold);font-size:1rem;margin-bottom:6px;"><i class="fas fa-people-group" style="margin-right:8px;"></i>Collective Insight</div>
+                        <p class="body-text">The team's <strong>diversity</strong> is its greatest asset. The <strong>Prospecting-dominant</strong> profiles (Riaan, Aviraj, Krrish) drive innovation and change; the <strong>Judging-dominant</strong> profiles (Amaan, Sunay) ensure operational stability and follow-through. The <strong>Feeling-dominant</strong> profiles (Sunay, Devansh, Aviraj) maintain stakeholder alignment, while the <strong>Thinking-dominant</strong> profiles (Krrish) enforce objective rigor. This balance enables the team to <strong>start strong and finish stronger</strong> — a critical capability for navigating the 2026 crisis.</p>
+                        <div class="quote-block" style="margin-top:10px;">
+                            "In times of crisis, the most resilient teams are not those with the most similar thinkers, but those with the most complementary minds."
+                            <div class="attrib">— Executive Leadership Framework, 2026</div>
+                        </div>
+                    </div>
+
+                    <div style="background:rgba(0,0,0,0.02);border-radius:12px;padding:16px;border:1px solid rgba(0,0,0,0.04);margin-top:16px;">
+                        <div style="font-weight:800;color:var(--text-primary);font-size:0.9rem;margin-bottom:6px;"><i class="fas fa-chess-queen" style="color:var(--porsche-gold);margin-right:8px;"></i>Recommended Development Areas</div>
+                        <div class="grid-2">
+                            <ul class="blist" style="font-size:0.82rem;">
+                                <li><strong>Aviraj:</strong> Develop follow-through mechanisms; pair with Si-dominant for execution.</li>
+                                <li><strong>Amaan:</strong> Build adaptability; practice scenario planning with Ne-dominant partners.</li>
+                                <li><strong>Krrish:</strong> Enhance consensus-building; leverage Fe-dominant partners for communication.</li>
+                            </ul>
+                            <ul class="blist" style="font-size:0.82rem;">
+                                <li><strong>Sunay:</strong> Strengthen conflict resolution skills; practice giving direct feedback.</li>
+                                <li><strong>Riaan:</strong> Improve sustained focus; pair with Judging-dominant for project completion.</li>
+                                <li><strong>Devansh:</strong> Develop strategic planning; collaborate with Ne-dominant for long-term vision.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ═══ SCRIPTS ═══ -->
+    <script>
+        // ─── NAVIGATION ───
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const idx = parseInt(this.dataset.page);
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelectorAll('.page-content').forEach((p, i) => {
+                    p.classList.toggle('active', i === idx);
+                });
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        // ─── CHARTS ───
+        window.addEventListener('DOMContentLoaded', function() {
+
+            // CHART 0: Margin vs China
+            new Chart(document.getElementById('ch0'), {
+                type: 'line',
+                data: {
+                    labels: ['2022', '2023', '2024', '2025', '2026', '2027(P)', '2028(P)'],
+                    datasets: [{
+                        label: 'Op. Return on Sales %',
+                        data: [18.0, 18.6, 15.0, 12.5, 10.8, 15.5, 18.2],
+                        borderColor: '#d5001c',
+                        backgroundColor: 'rgba(213,0,28,0.08)',
+                        fill: true,
+                        tension: 0.35,
+                        pointBackgroundColor: '#d5001c'
+                    }, {
+                        label: 'China Deliveries (k)',
+                        data: [93.3, 79.3, 64.1, 41.9, 33.0, 48.0, 62.0],
+                        borderColor: '#b8860b',
+                        borderDash: [6, 4],
+                        tension: 0.35,
+                        backgroundColor: 'transparent',
+                        pointBackgroundColor: '#b8860b'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#0b1a2f', font: { size: 10, family: 'JetBrains Mono' } } }
+                    },
+                    scales: {
+                        x: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { color: '#5a6f8c' } },
+                        y: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { color: '#5a6f8c' } }
+                    }
+                }
+            });
+
+            // CHART 1: Regional
+            new Chart(document.getElementById('ch1'), {
+                type: 'bar',
+                data: {
+                    labels: ['N.America', 'Europe', 'China', 'Germany', 'Overseas'],
+                    datasets: [
+                        { label: '2023', data: [86.0, 70.2, 79.3, 32.4, 52.2], backgroundColor: 'rgba(138,155,181,0.35)' },
+                        { label: '2026 (P)', data: [76.5, 62.0, 33.0, 28.1, 46.0], backgroundColor: '#d5001c' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#0b1a2f', font: { size: 10, family: 'JetBrains Mono' } } }
+                    },
+                    scales: {
+                        x: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { color: '#5a6f8c' } },
+                        y: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { color: '#5a6f8c' } }
+                    }
+                }
+            });
+
+            // CHART 2: Powertrain mix
+            new Chart(document.getElementById('ch2'), {
+                type: 'bar',
+                data: {
+                    labels: ['2022', '2024', '2026 (Strategy)', '2028 (Target)'],
+                    datasets: [
+                        { label: 'BEV %', data: [11, 13, 20, 35], backgroundColor: '#0088cc' },
+                        { label: 'PHEV %', data: [15, 19, 30, 35], backgroundColor: '#b8860b' },
+                        { label: 'ICE %', data: [74, 68, 50, 30], backgroundColor: '#d5001c' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#0b1a2f', font: { size: 10, family: 'JetBrains Mono' } } }
+                    },
+                    scales: {
+                        x: { stacked: true, grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { color: '#5a6f8c' } },
+                        y: { stacked: true, grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { color: '#5a6f8c' } }
+                    }
+                }
+            });
+
+            // CHART 3: Production volume
+            new Chart(document.getElementById('ch3'), {
+                type: 'bar
