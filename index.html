@@ -1417,4 +1417,89 @@
         data: {
           labels: prod.plants,
           datasets: [
-            { label: '2025', data: prod
+            { label: '2025', data: prod['2025'], backgroundColor: 'rgba(122,139,168,0.4)', borderRadius: 4 },
+            { label: '2026 (P)', data: prod['2026'], backgroundColor: '#d4af37', borderRadius: 4 }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#b0c4de', font: { size: 9 } } } }, scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7a8ba8' } }, y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7a8ba8' } } } }
+      });
+
+      const qual = await fetchData('/api/quality');
+      new Chart(document.getElementById('ch4'), {
+        type: 'line',
+        data: {
+          labels: qual.quarters,
+          datasets: [
+            { label: 'Defect (ppm)', data: qual.defect, borderColor: '#10b981', tension: 0.4, pointRadius: 3 },
+            { label: 'Complaints', data: qual.complaints, borderColor: '#d4af37', tension: 0.4, borderDash: [5,5], pointRadius: 3 }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#b0c4de', font: { size: 9 } } } }, scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7a8ba8' } }, y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7a8ba8' } } } }
+      });
+
+      const mix = await fetchData('/api/region-mix');
+      new Chart(document.getElementById('ch5'), {
+        type: 'doughnut',
+        data: {
+          labels: mix.labels,
+          datasets: [{ data: mix.values, backgroundColor: ['#d5001c','#d4af37','#00b4d8','#a855f7','#10b981'], borderColor: 'rgba(0,0,0,0.3)', borderWidth: 2 }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#b0c4de', font: { size: 9 } } } } }
+      });
+
+      // ─── NEW: Financials Chart ───
+      const fin = await fetchData('/api/financials');
+      new Chart(document.getElementById('ch6'), {
+        type: 'bar',
+        data: {
+          labels: fin.labels,
+          datasets: [
+            { label: 'Revenue (€B)', data: fin.revenue, backgroundColor: 'rgba(213,0,28,0.7)', borderRadius: 4 },
+            { label: 'EBIT (€B)', data: fin.ebit, backgroundColor: 'rgba(212,175,55,0.8)', borderRadius: 4 }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#b0c4de', font: { size: 9 } } } }, scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7a8ba8' } }, y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7a8ba8' } } } }
+      });
+
+      // ─── SOLUTIONS ──────────────────────────────────────────────────────
+      const sol = await fetchData('/api/solutions');
+      const container = document.getElementById('solutions-container');
+      sol.pillars.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'pillar-card';
+        card.style.borderTopColor = p.color;
+        card.innerHTML = `
+          <div class="icon" style="color:${p.color}"><i class="fas ${p.icon}"></i></div>
+          <h3>${p.title}</h3>
+          <div class="kpi"><strong>${p.kpi.label}:</strong> ${p.kpi.value} (${p.kpi.change})</div>
+          <div class="desc">${p.description}</div>
+          <ul>${p.actions.map(a => `<li>${a}</li>`).join('')}</ul>
+          <div style="margin-top:8px;font-family:var(--font-mono);font-size:0.6rem;color:var(--text-muted);">Status: <span style="color:${p.color};font-weight:700;">${p.status}</span></div>
+        `;
+        container.appendChild(card);
+      });
+
+      // ─── PLAYBOOK ──────────────────────────────────────────────────────
+      const pb = await fetchData('/api/playbook');
+      const rapidContainer = document.getElementById('rapid-container');
+      pb.rapid.forEach(r => {
+        const box = document.createElement('div');
+        box.className = 'rapid-box';
+        box.innerHTML = `<div class="phase">${r.phase}</div><div class="owner">${r.owner}</div><div class="desc">${r.desc}</div>`;
+        rapidContainer.appendChild(box);
+      });
+      const templatesContainer = document.getElementById('templates-container');
+      pb.templates.forEach(t => {
+        const card = document.createElement('div');
+        card.className = 'collab-card';
+        card.style.borderLeftColor = 'var(--accent-cyan)';
+        card.innerHTML = `<div class="role">TEMPLATE</div><div class="pair">${t.title}</div><div class="desc">${t.desc}</div>`;
+        templatesContainer.appendChild(card);
+      });
+
+      // initial confetti
+      confetti({ particleCount: 80, spread: 80, origin: { y: 0.6 } });
+    });
+  </script>
+</body>
+</html>
